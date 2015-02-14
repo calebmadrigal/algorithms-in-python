@@ -3,6 +3,7 @@
 __author__ = "Caleb Madrigal"
 __date__ = "2015-02-13"
 
+
 def merge(left, right):
     if len(left) < 1:
         return right
@@ -15,6 +16,7 @@ def merge(left, right):
             return [first_left] + merge(rest_left, right)
         else:
             return [first_right] + merge(left, rest_right)
+
 
 def mergesort(lst):
     list_len = len(lst)
@@ -32,6 +34,7 @@ def mergesort(lst):
         left_sorted = mergesort(left)
         right_sorted = mergesort(right)
         return merge(left_sorted, right_sorted)
+
 
 if __name__ == "__main__":
     import random
