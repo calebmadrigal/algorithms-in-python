@@ -37,8 +37,7 @@ def mergesort(lst):
 
 
 if __name__ == "__main__":
-    import random
-    data = [random.randint(0,10) for i in range(9)]
-    print('UNSORTED:', data)
-    print('SORTED:  ', mergesort(data))
+    import unittest
+    testsuite = unittest.TestLoader().discover('test', pattern="*mergesort*")
+    unittest.TextTestRunner(verbosity=1).run(testsuite)
 

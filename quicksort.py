@@ -19,8 +19,7 @@ def quicksort(lst):
         return quicksort(low) + [pivot] + quicksort(high)
 
 if __name__ == "__main__":
-    import random
-    data = [random.randint(0,10) for i in range(9)]
-    print('UNSORTED:', data)
-    print('SORTED:  ', quicksort(data))
+    import unittest
+    testsuite = unittest.TestLoader().discover('test', pattern="*quicksort*")
+    unittest.TextTestRunner(verbosity=1).run(testsuite)
 
