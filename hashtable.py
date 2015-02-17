@@ -16,53 +16,59 @@ class HashTable:
         # The outmost list is the one which the hash function maps the index to. The next inner
         # Array is the list of objects in that storage cell. The 3rd level is the individual
         # item array, where the 1st item is the key, and the 2nd item is the value.
-        self.data = [[] for i in range(capacity)]
+        self.data = [[] for _ in range(capacity)]
+
+    def _find_by_key(self, key, find_result_func):
+        index = hash_function(key, self.capacity)
+        hash_table_cell = self.data[index]
+        found_item = None
+        for item in hash_table_cell:
+            if item[0] == key:
+                found_item = item
+                break
+
+        return find_result_func(found_item, hash_table_cell)
 
     def set(self, key, obj):
-        """ Insert object with key into hashtable. If key already exists, then the object will be
+        """ Insert object with key into hash table. If key already exists, then the object will be
         updated. Key must be a string. Returns self. """
 
-        index = hash_function(key, self.capacity)
-        storage_cell = self.data[index]
-        for item in storage_cell:
-            if item[0] == key:
-                item[1] = obj
-        else:
-            storage_cell.append([key, obj])
-            self.size += 1
+        def find_result_func(found_item, hash_table_cell):
+            if found_item:
+                found_item[1] = obj
+            else:
+                hash_table_cell.append([key, obj])
+                self.size += 1
 
+        self._find_by_key(key, find_result_func)
         return self
 
     def get(self, key):
         """ Get object with key (key must be a string). If not found, it will raise a KeyError. """
 
-        index = hash_function(key, self.capacity)
-        storage_cell = self.data[index]
-        for item in storage_cell:
-            if item[0] == key:
-                return item[1]
-        else:
-            raise KeyError(key)
+        def find_result_func(found_item, _):
+            if found_item:
+                return found_item[1]
+            else:
+                raise KeyError(key)
+
+        return self._find_by_key(key, find_result_func)
 
     def remove(self, key):
         """ Remove the object associated with key from the hashtable. If found, the object will
         be returned. If not found, KeyError will be raised. """
 
-        index = hash_function(key, self.capacity)
-        storage_cell = self.data[index]
-        item_to_remove = None
-        for item in storage_cell:
-            if item[0] == key:
-                item_to_remove = item
-        if item_to_remove:
-                storage_cell.remove(item)
+        def find_result_func(found_item, hash_table_cell):
+            if found_item:
+                hash_table_cell.remove(found_item)
                 self.size -= 1
-                return item[1]
-        else:
-            raise KeyError(key)
+                return found_item[1]
+            else:
+                raise KeyError(key)
+
+        return self._find_by_key(key, find_result_func)
 
 if __name__ == "__main__":
     import unittest
     testsuite = unittest.TestLoader().discover('test', pattern="*hashtable*")
     unittest.TextTestRunner(verbosity=1).run(testsuite)
-

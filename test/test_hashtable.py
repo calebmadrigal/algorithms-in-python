@@ -32,23 +32,27 @@ class HashTableTest(unittest.TestCase):
         self.assertEqual(ht.capacity, 1000)
 
     def testSetAndGet(self):
+        # Basic set and get
         ht = hashtable.HashTable(10)
         ht.set('a', 1)
         self.assertEqual(ht.get('a'), 1)
         self.assertEqual(ht.size, 1)
 
+        # Check update functionality
         ht.set('a', 2)
         self.assertEqual(ht.get('a'), 2)
-        #self.assertEqual(ht.size, 1)
+        self.assertEqual(ht.size, 1)
 
+        # Make sure we can add a 2nd element
         ht.set('b', 10)
         self.assertEqual(ht.get('b'), 10)
         self.assertEqual(ht.get('a'), 2)
-        #self.assertEqual(ht.size, 2)
+        self.assertEqual(ht.size, 2)
 
         # Assert ht.set returns itself (for fluent calls)
         self.assertEqual(ht.set('c', 5), ht)
 
+        # Test fluent set functionality
         ht.set('d', 100).set('e', 200).set('f', 300)
         self.assertEqual(ht.get('d'), 100)
         self.assertEqual(ht.get('e'), 200)
@@ -67,7 +71,6 @@ class HashTableTest(unittest.TestCase):
         self.assertEqual(removed_item, 1)
         self.assertEqual(ht.size, 0)
 
-        
 if __name__ == '__main__':
     unittest.main()
 
