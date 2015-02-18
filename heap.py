@@ -3,6 +3,7 @@
 __author__ = "Caleb Madrigal"
 __date__ = "2015-02-17"
 
+import math
 from enum import Enum
 from autoresizelist import AutoResizeList
 
@@ -20,6 +21,12 @@ class Heap:
             self.data = AutoResizeList(initial_data)
 
         self.heap_type = heap_type
+        if heap_type == HeapType.maxheap:
+            self.comparator = lambda x, y: x > y
+        else:
+            self.comparator = lambda x, y: x < y
+
+        self.size = len(self.data)
         self.build_heap(initial_data)
 
     def _left_child(self, index):
@@ -28,16 +35,25 @@ class Heap:
     def _right_child(self, index):
         return 2*index + 2
 
-    def _resize_if_necessary(self):
-        pass
+    def _parent(self, index):
+        return math.floor((index - 1) / 2.0)
 
     def build_heap(self, initial_data):
         for i in initial_data:
             self.data.append(i)
 
-    def push(self, item):
+    def heap_up(self, index):
+        pass
 
-        self.data.append(item)
+    def heap_down(self, index):
+        pass
+
+    def push(self, item):
+        insert_index = self.size  # Insert at the end
+        self.size += 1
+
+        self.data[insert_index] = item
+        self.heap_up(insert_index)
 
     def peek(self):
         return self.data[0]

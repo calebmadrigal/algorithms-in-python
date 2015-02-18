@@ -32,6 +32,9 @@ class AutoResizeList:
     def __eq__(self, other):
         return self._data == other._data
 
+    def __len__(self):
+        return len(self._data)
+
 if __name__ == "__main__":
     import unittest
     testsuite = unittest.TestLoader().discover('test', pattern="*autoresizelist*")

@@ -31,7 +31,11 @@ class AutoResizeListTest(unittest.TestCase):
         a = AutoResizeList([1,2,3])
         b = AutoResizeList([1,2,3])
         self.assertEqual(a, b)
-        
+
+    def testLen(self):
+        a = AutoResizeList([1,2,3])
+        self.assertEqual(len(a), 3)
+
 if __name__ == '__main__':
     unittest.main()
 
