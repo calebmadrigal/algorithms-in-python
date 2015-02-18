@@ -13,9 +13,13 @@ class HeapType(Enum):
 
 
 class Heap:
-    def __init__(self, initial_data, heap_type=HeapType.maxheap, initial_capacity=10):
+    def __init__(self, initial_data=None, heap_type=HeapType.maxheap):
+        if initial_data is None:
+            self.data = AutoResizeList()
+        else:
+            self.data = AutoResizeList(initial_data)
+
         self.heap_type = heap_type
-        self.data = AutoResizeList()
         self.build_heap(initial_data)
 
     def _left_child(self, index):
