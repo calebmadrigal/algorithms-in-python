@@ -19,7 +19,9 @@ class AutoResizeListTest(unittest.TestCase):
 
     def testGet(self):
         c = AutoResizeList([], fill=100)
-        self.assertEqual(c[10], 100)
+        c[10] = 1
+        self.assertEqual(c[10], 1)
+        self.assertEqual(c[9], 100)
 
     def testDel(self):
         d = AutoResizeList([0, 1, 2])
@@ -28,13 +30,18 @@ class AutoResizeListTest(unittest.TestCase):
         self.assertEqual(d._data, [0, 1, 2, 4])
 
     def testEqual(self):
-        a = AutoResizeList([1,2,3])
-        b = AutoResizeList([1,2,3])
+        a = AutoResizeList([1, 2, 3])
+        b = AutoResizeList([1, 2, 3])
         self.assertEqual(a, b)
 
     def testLen(self):
-        a = AutoResizeList([1,2,3])
+        a = AutoResizeList([1, 2, 3])
         self.assertEqual(len(a), 3)
+
+    def testPrepend(self):
+        a = AutoResizeList([1, 2, 3])
+        a.prepend(0)
+        self.assertEqual(0, a._data[0])
 
 if __name__ == '__main__':
     unittest.main()

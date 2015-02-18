@@ -19,8 +19,8 @@ class AutoResizeList:
         self._data[key] = value
 
     def __getitem__(self, key):
-        if key >= len(self._data):
-            self._data += [self.fill] * (key - len(self._data) + 1)
+        #if key >= len(self._data):
+        #    self._data += [self.fill] * (key - len(self._data) + 1)
         return self._data[key]
 
     def __delitem__(self, key):
@@ -34,6 +34,12 @@ class AutoResizeList:
 
     def __len__(self):
         return len(self._data)
+
+    def append(self, item):
+        self._data.append(item)
+
+    def prepend(self, item):
+        self._data = [item] + self._data
 
 if __name__ == "__main__":
     import unittest

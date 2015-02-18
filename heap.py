@@ -15,19 +15,17 @@ class HeapType(Enum):
 
 class Heap:
     def __init__(self, initial_data=None, heap_type=HeapType.maxheap):
-        if initial_data is None:
-            self.data = AutoResizeList()
-        else:
-            self.data = AutoResizeList(initial_data)
-            self.build_heap(initial_data)
-
         self.heap_type = heap_type
         if heap_type == HeapType.maxheap:
             self.comparator = lambda x, y: x > y
         else:
             self.comparator = lambda x, y: x < y
 
-        self.size = len(self.data)
+        self.data = AutoResizeList()
+        if initial_data is not None:
+            self.build_heap(initial_data)
+
+        self._size = len(self.data)
 
     def _left_child(self, index):
         return 2*index + 1
@@ -46,7 +44,8 @@ class Heap:
 
     def build_heap(self, initial_data):
         for i in initial_data:
-            self.data.append(i)
+            self.data.prepend(i)
+            self.heap_down(0)
 
     def heap_up(self, index):
         # If we are at the root, return - we are done
@@ -63,8 +62,14 @@ class Heap:
     def heap_down(self, index):
         left_index = self._left_child(index)
         right_index = self._right_child(index)
-        left = self.data[left_index]
-        right = self.data[right_index]
+        try:
+            left = self.data[left_index]
+        except IndexError:
+            left = None
+        try:
+            right = self.data[right_index]
+        except IndexError:
+            right = None
 
         # Find the largest child
         largest_child = left
@@ -84,8 +89,8 @@ class Heap:
             self.heap_down(largest_child_index)
 
     def push(self, item):
-        insert_index = self.size  # Insert at the end
-        self.size += 1
+        insert_index = self._size  # Insert at the end
+        self._size += 1
 
         self.data[insert_index] = item
         self.heap_up(insert_index)
@@ -103,13 +108,16 @@ class Heap:
         item = self.data[0]
 
         # Move the bottom-most, right-most item to the root
-        self.data[0] = self.data[self.size-1]
-        self.data[self.size-1] = None
-        self.size -= 1
+        self.data[0] = self.data[self._size-1]
+        self.data[self._size-1] = None
+        self._size -= 1
 
         self.heap_down(0)
 
         return item
+
+    def size(self):
+        return self._size
 
     def __repr__(self):
         return str(self.data)
@@ -118,4 +126,3 @@ if __name__ == "__main__":
     import unittest
     testsuite = unittest.TestLoader().discover('test', pattern="*heap*")
     unittest.TextTestRunner(verbosity=1).run(testsuite)
-

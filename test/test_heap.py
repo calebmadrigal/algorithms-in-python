@@ -1,13 +1,20 @@
 import unittest
 import sys
 import os.path
+import random
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 import heap
 
 
-class HeapTest(unittest.TestCase):
+def is_heap(h):
+    sorted_data = list(sorted(filter(lambda x: x is not None, h.data), reverse=True))
+    pop_order = [h.pop() for _ in range(h.size())]
+    print("\nsorted data: {0}\npop_order:   {1}".format(sorted_data, pop_order))
+    return sorted_data == pop_order
 
+
+class HeapTest(unittest.TestCase):
     def testMaxHeapPushPop(self):
         # Test push
         h = heap.Heap()
@@ -34,6 +41,14 @@ class HeapTest(unittest.TestCase):
         self.assertEqual(h.pop(), 20)
         self.assertEqual(h.pop(), 9)
         self.assertEqual(h.pop(), 7)
+
+        # Larger test
+        data = [93, 89, 91, 84, 87, 54, 71, 62, 75, 35, 43, 50, 77, 27, 14, 42, 13, 35, 10, 4]
+        h2 = heap.Heap()
+        for d in data:
+            h2.push(d)
+
+        self.assertTrue(is_heap(h2))
 
     def testMinHeapPushPop(self):
         # Test Push
@@ -65,14 +80,14 @@ class HeapTest(unittest.TestCase):
         self.assertEqual(h.pop(), -10)
 
     def testMaxHeapBuild(self):
-        pass
-        #data = [6, 1, 4, 9, 8, 2, 3]
-        #h = heap.Heap(data, heap.HeapType.maxheap)
-        #self.assertEqual(h.pop(), 9)
-        #self.assertEqual(h.pop(), 8)
-        #h.push(15)
-        #h.push(0)
-        #self.assertEqual(h.pop(), 15)
+        data = [98, 45, 69, 85, 34, 66, 10, 2, 11, 3, 21, 30, 91, 32, 55, 74, 93, 17, 67, 19]
+        h = heap.Heap(data)
+        self.assertTrue(is_heap(h))
+
+        # data2 = [random.randint(1, 100) for _ in range(20)]
+        # print("\n\ndata:        {0}".format(data2))
+        # h3 = heap.Heap(data2[:])
+        # self.assertTrue(is_heap(h3))
         
 if __name__ == '__main__':
     unittest.main()
