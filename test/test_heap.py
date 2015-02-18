@@ -25,6 +25,23 @@ class HeapTest(unittest.TestCase):
         h.push(21)
         self.assertEqual(str(h), "[21, 20, 7, 9, 3, 2, 5, 1]")
 
+    def testMinPushHeap(self):
+        h = heap.Heap([], heap.HeapType.minheap)
+        h.push(5)
+        self.assertEqual(str(h), "[5]")
+
+        h.push(7)
+        self.assertEqual(str(h), "[5, 7]")
+
+        h.push(3)
+        self.assertEqual(str(h), "[3, 7, 5]")
+
+        h.push(4)
+        self.assertEqual(str(h), "[3, 4, 5, 7]")
+
+        h.push(-1)
+        self.assertEqual(str(h), "[-1, 3, 5, 7, 4]")
+
         #data = [6, 1, 4, 9, 8, 2, 3]
         #h = heap.Heap(data, heap.HeapType.maxheap)
         #self.assertEqual(h.pop(), 9)
