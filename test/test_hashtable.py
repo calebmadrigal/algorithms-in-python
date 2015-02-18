@@ -71,6 +71,20 @@ class HashTableTest(unittest.TestCase):
         self.assertEqual(removed_item, 1)
         self.assertEqual(ht.size, 0)
 
+    def testPythonDictInterface(self):
+        ht = hashtable.HashTable(10)
+
+        ht['a'] = 10
+        self.assertEqual(ht.get('a'), 10)
+
+        ht['a'] = 20
+        self.assertEqual(ht['a'], 20)
+
+        self.assertIn('a', ht.keys())
+
+        del ht['a']
+        self.assertRaises(KeyError, ht.get, 'a')
+
 if __name__ == '__main__':
     unittest.main()
 
