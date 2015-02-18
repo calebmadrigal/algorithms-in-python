@@ -11,21 +11,27 @@ class HeapType(Enum):
     minheap = 2
 
 
-class HeapQueue:
+class Heap:
     def __init__(self, initial_data, heap_type=HeapType.maxheap):
+        self.heap_type = heap_type
         self.data = []
+        self.build_heap(initial_data)
 
     def build_heap(self, initial_data):
-        pass
+        for i in initial_data:
+            self.data.append(i)
 
     def push(self, item):
-        pass
+        self.data.append(item)
 
     def peek(self):
-        pass
+        return self.data[0]
 
     def pop(self):
-        pass
+        item = self.data[0]
+        self.data[0] = self.data[-1]
+        del self.data[-1]
+        return item
 
 if __name__ == "__main__":
     import unittest
