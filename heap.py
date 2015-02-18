@@ -41,29 +41,47 @@ class Heap:
     def _is_root(self, index):
         return index == 0
 
+    def _swap(self, i1, i2):
+        self.data[i1], self.data[i2] = self.data[i2], self.data[i1]
+
     def build_heap(self, initial_data):
         for i in initial_data:
             self.data.append(i)
 
     def heap_up(self, index):
-        # Return if we are at the root
+        # If we are at the root, return - we are done
         if self._is_root(index):
             return
 
-        # Else, compare the current node with the parent node, and:
-        #   * this node > parent node (for max heap)
-        #   * this node < parent node (for min heap)
-        # Then swap and recursively do the same, but at the parent index (which is now
-        # where the node in question resides).
+        # Else, compare the current node with the parent node, and if this node should be higher
+        # then the parent node, then swap and recursively call on the parent index
         parent_index = self._parent(index)
         if self.comparator(self.data[index], self.data[parent_index]):
-            self.data[index], self.data[parent_index] = self.data[parent_index], self.data[index]
+            self._swap(index, parent_index)
             self.heap_up(parent_index)
-        else:
-            return
 
     def heap_down(self, index):
-        pass
+        left_index = self._left_child(index)
+        right_index = self._right_child(index)
+        left = self.data[left_index]
+        right = self.data[right_index]
+
+        # Find the largest child
+        largest_child = left
+        largest_child_index = left_index
+        if left is not None and right is not None:
+            if self.comparator(right, left):
+                largest_child = right
+                largest_child_index = right_index
+        elif right is not None:
+            largest_child = right
+            largest_child_index = right_index
+
+        # If the largest child is not None and is higher priority than the current, then swap
+        # and recursively call on on the child index
+        if largest_child is not None and self.comparator(largest_child, self.data[index]):
+            self._swap(index, largest_child_index)
+            self.heap_down(largest_child_index)
 
     def push(self, item):
         insert_index = self.size  # Insert at the end
@@ -78,13 +96,19 @@ class Heap:
         return self.data[0]
 
     def pop(self):
+        if len(self.data) < 1 or self.data[0] is None:
+            return None
+
         # Take item from the root
         item = self.data[0]
 
         # Move the bottom-most, right-most item to the root
-        self.data[0] = self.data[self.size]
-        del self.data[self.size]
+        self.data[0] = self.data[self.size-1]
+        self.data[self.size-1] = None
         self.size -= 1
+
+        self.heap_down(0)
+
         return item
 
     def __repr__(self):
