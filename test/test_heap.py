@@ -8,14 +8,30 @@ import heap
 
 class HeapTest(unittest.TestCase):
 
-    def testHeap(self):
-        data = [6, 1, 4, 9, 8, 2, 3]
-        h = heap.Heap(data, heap.HeapType.maxheap)
-        self.assertEqual(h.pop(), 9)
-        self.assertEqual(h.pop(), 8)
-        h.push(15)
-        h.push(0)
-        self.assertEqual(h.pop(), 15)
+    def testMaxPushHeap(self):
+        h = heap.Heap()
+        h.push(5).push(3).push(9).push(1)
+        self.assertEqual(str(h), "[9, 3, 5, 1]")
+
+        h.push(20)
+        self.assertEqual(str(h), "[20, 9, 5, 1, 3]")
+
+        h.push(2)
+        self.assertEqual(str(h), "[20, 9, 5, 1, 3, 2]")
+
+        h.push(7)
+        self.assertEqual(str(h), "[20, 9, 7, 1, 3, 2, 5]")
+
+        h.push(21)
+        self.assertEqual(str(h), "[21, 20, 7, 9, 3, 2, 5, 1]")
+
+        #data = [6, 1, 4, 9, 8, 2, 3]
+        #h = heap.Heap(data, heap.HeapType.maxheap)
+        #self.assertEqual(h.pop(), 9)
+        #self.assertEqual(h.pop(), 8)
+        #h.push(15)
+        #h.push(0)
+        #self.assertEqual(h.pop(), 15)
         
 if __name__ == '__main__':
     unittest.main()
