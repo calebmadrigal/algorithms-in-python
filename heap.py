@@ -4,6 +4,7 @@ __author__ = "Caleb Madrigal"
 __date__ = "2015-02-17"
 
 from enum import Enum
+from autoresizelist import AutoResizeList
 
 
 class HeapType(Enum):
@@ -12,16 +13,26 @@ class HeapType(Enum):
 
 
 class Heap:
-    def __init__(self, initial_data, heap_type=HeapType.maxheap):
+    def __init__(self, initial_data, heap_type=HeapType.maxheap, initial_capacity=10):
         self.heap_type = heap_type
-        self.data = []
+        self.data = AutoResizeList()
         self.build_heap(initial_data)
+
+    def _left_child(self, index):
+        return 2*index + 1
+
+    def _right_child(self, index):
+        return 2*index + 2
+
+    def _resize_if_necessary(self):
+        pass
 
     def build_heap(self, initial_data):
         for i in initial_data:
             self.data.append(i)
 
     def push(self, item):
+
         self.data.append(item)
 
     def peek(self):
