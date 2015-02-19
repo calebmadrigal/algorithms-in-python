@@ -102,19 +102,50 @@ def is_valid(board):
     """ Returns True if there are no more than 1 "1" in any row, column, or diagonal;
     Else, it returns False. """
 
-    return rows_valid(board) and cols_valid(board) and diags_valid(board)
+    # We only have to check that the diagonals are valid, since the search
+    # algorithm doesn't put more than 1 queen on a given row or column
+    #return rows_valid(board) and cols_valid(board) and diags_valid(board)
+    return diags_valid(board)
+
+
+def print_board_indented(board, row):
+    print('\t'*row + str(board).replace('\n', '\n'+('\t'*row)))
+
+
+def search(board, row=0, cols_taken=()):
+    """ In-place search for solution to n-queens. """
+
+    # Return if we are at the maximum depth and the solution is valid
+    if row == len(board) and is_valid(board):
+        return True
+
+    # Otherwise, try each column and recursively work down the rows
+    for col in range(len(board)):
+        if col in cols_taken:
+            continue
+
+        board[row][col] = 1
+        print_board_indented(board, row)
+
+        if is_valid(board):
+            if search(board, row+1, cols_taken + (col,)):
+                return True
+            else:
+                board[row][col] = 0
+        else:
+            board[row][col] = 0
+
+    return False
 
 
 def n_queens(size):
     board = np.zeros((size, size))
-    for row in range(size):
-        for col in range(size):
-            board[row][col] = size * row + col
-    return board
+    if search(board):
+        print("Solution found:")
+        print(board)
+    else:
+        print("No solution found")
 
 if __name__ == '__main__':
     board_size = 8
-    solution = n_queens(board_size)
-    print(solution)
-    print(diags_valid(solution))
-
+    n_queens(board_size)
