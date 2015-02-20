@@ -18,6 +18,7 @@ def permutations(lst):
         if rest == []:
             result.append(current)
             return
+
         for r in rest:
             permute(current + (r,), [i for i in rest if i != r])
 
@@ -39,6 +40,7 @@ def subsets(lst):
 
     _subsets((), lst)
     return result
+
 
 if __name__ == "__main__":
     print("Permutations of ['a','b','c']:", permutations(['a','b','c']))
