@@ -47,13 +47,13 @@ adjacency_list = {
 if __name__ == '__main__':
     adjacency_list_with_distance = {}
     for city_from in adjacency_list:
-        list_for_city_from = []
+        distances_to_adjacent_cities = {}
         for city_to in adjacency_list[city_from]:
             distance = get_city_distance(city_from, city_to)
-            list_for_city_from.append({city_to: distance})
+            distances_to_adjacent_cities[city_to] = distance
             print("Distance from {} to {}: {}".format(city_from, city_to, distance))
             time.sleep(.5)
-        adjacency_list_with_distance[city_from] = list_for_city_from
+        adjacency_list_with_distance[city_from] = distances_to_adjacent_cities
     print(adjacency_list_with_distance)
     with open("city_data.json", "w") as f:
         f.write(json.dumps(adjacency_list_with_distance))
