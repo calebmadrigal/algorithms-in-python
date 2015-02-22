@@ -1,8 +1,29 @@
+""" Horrible run-once code to download city data. """
+
 import time
 import json
+import itertools
 from urllib.request import urlopen, quote
 
 MAPS_API_TEMPLATE = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={}&destinations={}&mode=car&units=metric"
+STRAIGHT_DISTANCE_TEMPLATE = "http://www.travelmath.com/flying-distance/from/{}/to/{}"
+
+
+def miles_to_meters(miles):
+    return miles / 0.00062137
+
+
+def get_straight_distance(city_from, city_to):
+    city_from = '+'.join(city_from.split(' '))
+    city_to = '+'.join(city_to.split(' '))
+    url = STRAIGHT_DISTANCE_TEMPLATE.format(city_from, city_to)
+    raw_response = urlopen(url).read().decode(encoding='UTF-8')
+    miles = raw_response.find("miles", 20000)-10
+    start_index=raw_response.find(r'"', miles)+2
+    end_index = raw_response.find(r' ', start_index+1)
+    straight_distance = raw_response[start_index:end_index]
+    num = int(straight_distance.replace(',',''))
+    return miles_to_meters(num)
 
 
 def get_city_distance(city_from, city_to):
@@ -44,7 +65,7 @@ adjacency_list = {
     "Miami, FL": ["Orlando, FL"],
 }
 
-if __name__ == '__main__':
+def get_in_between_distances():
     adjacency_list_with_distance = {}
     for city_from in adjacency_list:
         distances_to_adjacent_cities = {}
@@ -57,4 +78,20 @@ if __name__ == '__main__':
     print(adjacency_list_with_distance)
     with open("city_data.json", "w") as f:
         f.write(json.dumps(adjacency_list_with_distance))
+
+
+def get_straight_distances():
+    all_cities = list(adjacency_list.keys())
+    straight_distances = dict([(key, {}) for key in all_cities])
+    for (city_from, city_to) in itertools.permutations(all_cities, 2):
+        distance = get_straight_distance(city_from, city_to)
+        straight_distances[city_from][city_to] = distance
+        print("Straight distance from {} to {} is {}".format(city_from, city_to, distance))
+
+    with open("straight_city_distances.json", "w") as f:
+        f.write(json.dumps(straight_distances))
+
+if __name__ == '__main__':
+    get_in_between_distance()
+    get_straight_distances()
 
