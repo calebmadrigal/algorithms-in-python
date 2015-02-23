@@ -43,8 +43,8 @@ adjacency_list = {
     "Minneapolis, MN": ["Milwaukee, WI", "Seattle, WA"],
     "Seattle, WA": ["Minneapolis, MN", "Portland, OR"],
     "Portland, OR": ["Seattle, WA", "Denver, CO", "San Francisco, CA"],
-    "Denver, CO": ["Portland, OR", "Las Vegas, NV", "Albuquerque, NM", "Kansas City, MO"],
-    "San Francisco, CA": ["Portland, OR", "Los Angeles, CA"],
+    "Denver, CO": ["Portland, OR", "Las Vegas, NV", "Albuquerque, NM", "Kansas City, MO", "San Francisco, CA"],
+    "San Francisco, CA": ["Portland, OR", "Los Angeles, CA", "Denver, CO"],
     "Los Angeles, CA": ["San Francisco, CA", "Las Vegas, NV", "Phoenix, AZ"],
     "Las Vegas, NV": ["Los Angeles, CA", "Phoenix, AZ", "Denver, CO"],
     "Phoenix, AZ": ["Las Vegas, NV", "Los Angeles, CA", "Albuquerque, NM"],
@@ -94,5 +94,5 @@ def get_straight_distances():
 
 if __name__ == '__main__':
     get_in_between_distances()
-    get_straight_distances()
+    #get_straight_distances()
 
