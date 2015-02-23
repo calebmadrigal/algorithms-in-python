@@ -52,6 +52,7 @@ adjacency_list = {
     "Dallas, TX": ["Albuquerque, NM", "Houston, TX", "St. Louis, MO", "Atlanta, GA", "Kansas City, MO", "Austin, TX"],
     "Houston, TX": ["Dallas, TX", "San Antonio, TX"],
     "Austin, TX": ["San Antonio, TX", "Dallas, TX"],
+    "San Antonio, TX": ["Austin, TX", "Houston, TX"],
     "Atlanta, GA": ["Dallas, TX", "St. Louis, MO", "Jacksonville, FL", "Cincinnati, OH"],
     "Cincinnati, OH": ["Atlanta, GA", "Indianapolis, IN", "Pittsburgh, PA", "Cleveland, OH"],
     "Cleveland, OH": ["Chicago, IL", "Detroit, MI", "Pittsburgh, PA", "Cincinnati, OH"],
