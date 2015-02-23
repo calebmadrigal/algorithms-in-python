@@ -93,6 +93,6 @@ def get_straight_distances():
         f.write(json.dumps(straight_distances))
 
 if __name__ == '__main__':
-    get_in_between_distance()
+    get_in_between_distances()
     get_straight_distances()
 
