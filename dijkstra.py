@@ -28,6 +28,7 @@ list quickly. The unvisited list is re-sorted after each node is visited.
 """
 
 import json
+import sys
 
 
 def unroll_shortest_path(current, optimal_parent_map, path=()):
@@ -38,6 +39,9 @@ def unroll_shortest_path(current, optimal_parent_map, path=()):
 
 
 def dijkstra(start_city, end_city, city_data, verbose=True):
+    if start_city == end_city:
+        return (start_city,)
+
     # Inefficiency: should be implemented as a priority queue
     start_city_distance_entry = [0, start_city]
     city_node_lookup = {start_city: start_city_distance_entry}
@@ -91,7 +95,16 @@ def get_city_data():
     return city_data
 
 if __name__ == '__main__':
-    #print(dijkstra("Milwaukee, WI", "Orlando, FL", get_city_data()))
-    #print(dijkstra("Milwaukee, WI", "Houston, TX", get_city_data()))
-    #print(dijkstra("Milwaukee, WI", "St. Louis, MO", get_city_data()))
-    print(dijkstra("Milwaukee, WI", "Portland, OR", get_city_data(), False))
+    city_data = get_city_data()
+    try:
+        city_from = sys.argv[1]
+        city_to = sys.argv[2]
+    except IndexError:
+        print("Usage:", sys.argv[0], "\"from city\" \"to city>\"")
+        print("City choices:")
+        for city in city_data:
+            print("   -", city)
+        sys.exit(1)
+
+    print(dijkstra(city_from, city_to, city_data, False))
+
