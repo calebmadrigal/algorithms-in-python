@@ -38,7 +38,7 @@ def unroll_shortest_path(current, optimal_parent_map, path=()):
         return unroll_shortest_path(optimal_parent_map[current], optimal_parent_map, (current,) + path)
 
 
-def dijkstra(start_city, end_city, city_data, verbose=True):
+def dijkstra(start_city, end_city, city_data, verbose=False):
     if start_city == end_city:
         return (start_city,)
 
