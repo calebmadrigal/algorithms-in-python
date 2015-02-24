@@ -38,7 +38,7 @@ def breadth_first_search(from_city, to_city, city_data):
 
     while to_visit != []:
         current = to_visit.popleft()  # Treat to_visit as queue
-        visited.add(current)
+        print("Visiting:", current)
         neighbors = city_data[current].keys()
 
         for n in neighbors:
@@ -48,6 +48,7 @@ def breadth_first_search(from_city, to_city, city_data):
 
             elif n not in visited:
                 parent_map[n] = current
+                visited.add(n)
                 to_visit.append(n)
 
     return None
