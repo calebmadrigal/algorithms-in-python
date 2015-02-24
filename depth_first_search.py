@@ -30,33 +30,59 @@ def unroll_shortest_path(current, optimal_parent_map, path=()):
         return unroll_shortest_path(optimal_parent_map[current], optimal_parent_map, (current,) + path)
 
 
-def get_city_data():
-    city_data = None
-    with open("city_data.json","r") as f:
-        city_data = json.loads(f.read())
-    return city_data
+def depth_first_search_iter(from_city, to_city, city_data):
+    to_visit = [from_city]
+    visited = set([from_city])
+    parent_map = {from_city: None}
+
+    while to_visit != []:
+        current = to_visit.pop()
+        visited.add(current)
+        neighbors = city_data[current].keys()
+
+        for n in neighbors:
+            if n == to_city:
+                parent_map[n] = current
+                return unroll_shortest_path(to_city, parent_map)
+
+            elif n not in visited:
+                parent_map[n] = current
+                to_visit.append(n)
+
+    return None
 
 
 def depth_first_search(from_city, to_city, city_data):
     visited = set()
 
-    def _depth_first_search(from_city, to_city, city_data, path=()):
-        print("Checking: {}".format(from_city))
+    def _depth_first_search(from_city, to_city, city_data, path=(from_city,)):
+        # If destination found, return the path hereto compiled
         if from_city == to_city:
             return path
-        elif len(visited) == len(city_data):
-            print("HIT")
-            return None
         else:
-            neighbors = list(city_data[from_city].keys())
             visited.add(from_city)
-            for n in neighbors:
-                if n not in visited:
-                    result = _depth_first_search(n, to_city, city_data, path+(n,))
-                    if result is not None:
-                        return result
+            neighbors = city_data[from_city].keys()
+            unvisited_neighbors = [n for n in neighbors if n not in visited]
+
+            # If there are no more unvisited neighbors, this path doesn't lead to the goal
+            if unvisited_neighbors == []:
+                return None
+
+            # Else, for each unvisited neighbor, recursively try to reach the solution
+            # from it as the "from_city". Also update the path
+            for n in unvisited_neighbors:
+                result = _depth_first_search(n, to_city, city_data, path+(n,))
+                if result is not None:
+                    return result
 
     return _depth_first_search(from_city, to_city, city_data)
+
+
+def get_city_data():
+    city_data = None
+    with open("city_data.json","r") as f:
+        city_data = json.loads(f.read())
+    return city_data
 
 
 if __name__ == '__main__':
@@ -71,5 +97,6 @@ if __name__ == '__main__':
             print("   -", city)
         sys.exit(1)
 
-    print(depth_first_search(city_from, city_to, city_data))
+    print("Recursive:", depth_first_search(city_from, city_to, city_data))
+    print("\nIterative:", depth_first_search_iter(city_from, city_to, city_data))
 
