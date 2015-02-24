@@ -1,4 +1,4 @@
-""" Depth-first search (recursive and iterative solutions)
+""" Breadth-first search
 
 This ignores the distance between the city data, and just cares about number of hops.
 
@@ -21,6 +21,7 @@ So the neighbors of a city node can be found like this: list(city_data["Milwauke
 
 import json
 import sys
+from collections import deque
 
 
 def unroll_shortest_path(current, optimal_parent_map, path=()):
@@ -30,13 +31,13 @@ def unroll_shortest_path(current, optimal_parent_map, path=()):
         return unroll_shortest_path(optimal_parent_map[current], optimal_parent_map, (current,) + path)
 
 
-def depth_first_search_iter(from_city, to_city, city_data):
-    to_visit = [from_city]
+def breadth_first_search(from_city, to_city, city_data):
+    to_visit = deque([from_city])
     visited = set([from_city])
     parent_map = {from_city: None}
 
     while to_visit != []:
-        current = to_visit.pop()
+        current = to_visit.popleft()  # Treat to_visit as queue
         visited.add(current)
         neighbors = city_data[current].keys()
 
@@ -50,32 +51,6 @@ def depth_first_search_iter(from_city, to_city, city_data):
                 to_visit.append(n)
 
     return None
-
-
-def depth_first_search(from_city, to_city, city_data):
-    visited = set()
-
-    def _depth_first_search(from_city, to_city, city_data, path=(from_city,)):
-        # If destination found, return the path hereto compiled
-        if from_city == to_city:
-            return path
-        else:
-            visited.add(from_city)
-            neighbors = city_data[from_city].keys()
-            unvisited_neighbors = [n for n in neighbors if n not in visited]
-
-            # If there are no more unvisited neighbors, this path doesn't lead to the goal
-            if unvisited_neighbors == []:
-                return None
-
-            # Else, for each unvisited neighbor, recursively try to reach the solution
-            # from it as the "from_city". Also update the path
-            for n in unvisited_neighbors:
-                result = _depth_first_search(n, to_city, city_data, path+(n,))
-                if result is not None:
-                    return result
-
-    return _depth_first_search(from_city, to_city, city_data)
 
 
 def get_city_data():
@@ -97,6 +72,5 @@ if __name__ == '__main__':
             print("   -", city)
         sys.exit(1)
 
-    print("Recursive:", depth_first_search(city_from, city_to, city_data))
-    print("\nIterative:", depth_first_search_iter(city_from, city_to, city_data))
+    print(breadth_first_search(city_from, city_to, city_data))
 
