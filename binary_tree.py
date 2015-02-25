@@ -27,10 +27,11 @@ def add(tree, value):
         tree = [value, [], []]
     elif node_value(tree) == None:
         node_value(tree, value)
-    elif value <= node_value(tree):
+    elif value < node_value(tree):
         left_child(tree, add(left_child(tree), value))
-    else:
+    elif value > node_value(tree):
         right_child(tree, add(right_child(tree), value))
+    # If value == node_value(tree): It's already there - don't reinsert it
     return tree
 
 
@@ -38,8 +39,18 @@ def remove(tree, value):
     pass
 
 
-def is_in(tree, value):
-    pass
+def contains(tree, value):
+    if tree == []:
+        return False
+    if node_value(tree) == value:
+        return True
+    return contains(left_child(tree), value) or contains(right_child(tree), value)
+
+
+def inorder(tree):
+    if tree == [] or node_value(tree) == None:
+        return []
+    return inorder(left_child(tree)) + [node_value(tree)] + inorder(right_child(tree))
 
 
 def print_tree(tree, indent=0):
@@ -55,4 +66,8 @@ if __name__ == '__main__':
     for i in [5, 3, 8, 5, 2, 10, 20, 15, 30, 0, 7]:
         tree = add(tree, i)
     print_tree(tree)
+    print("Is 5 in tree?", contains(tree, 5))
+    print("Is 20 in tree?", contains(tree, 20))
+    print("Is 100 in tree?", contains(tree, 100))
+    print("Inorder:", inorder(tree))
 
