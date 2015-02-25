@@ -3,15 +3,6 @@
 __author__ = "Caleb Madrigal"
 __date__ = "2015-02-25"
 
-node_value = lambda: node: node[0]
-set_node_value = lambda node, value: node[0] = value
-
-left_child = lambda: node: return node[1]
-set_left_child = lambda node, new_node: node[1] = new_node
-
-right_child = lambda: node: return node[2]
-set_right_child = lambda node, new_node: node[2] = new_node
-
 
 def node_value(node, new_value=None):
     if new_value:
