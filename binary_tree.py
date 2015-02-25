@@ -53,6 +53,30 @@ def inorder(tree):
     return inorder(left_child(tree)) + [node_value(tree)] + inorder(right_child(tree))
 
 
+def inorder_traverse(tree, visit_func):
+    if tree == [] or node_value(tree) == None:
+        return
+    inorder_traverse(left_child(tree), visit_func)
+    visit_func(node_value(tree))
+    inorder_traverse(right_child(tree), visit_func)
+
+
+def postorder_traverse(tree, visit_func):
+    if tree == [] or node_value(tree) == None:
+        return
+    postorder_traverse(left_child(tree), visit_func)
+    postorder_traverse(right_child(tree), visit_func)
+    visit_func(node_value(tree))
+
+
+def preorder_traverse(tree, visit_func):
+    if tree == [] or node_value(tree) == None:
+        return
+    visit_func(node_value(tree))
+    preorder_traverse(left_child(tree), visit_func)
+    preorder_traverse(right_child(tree), visit_func)
+
+
 def print_tree(tree, indent=0):
     if tree == [] or node_value(tree) == None:
         return
@@ -70,4 +94,11 @@ if __name__ == '__main__':
     print("Is 20 in tree?", contains(tree, 20))
     print("Is 100 in tree?", contains(tree, 100))
     print("Inorder:", inorder(tree))
+    print("Inorder traversal: ", end="")
+    inorder_traverse(tree, lambda node: print(node, end=", "))
+    print("\nPostorder traversal: ", end="")
+    postorder_traverse(tree, lambda node: print(node, end=", "))
+    print("\nPreorder traversal: ", end="")
+    preorder_traverse(tree, lambda node: print(node, end=", "))
+    print()
 
