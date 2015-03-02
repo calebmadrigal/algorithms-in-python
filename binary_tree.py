@@ -47,7 +47,7 @@ def add(tree, value):
     return tree
 
 
-def find_node(tree, value, parent=None, is_right_child=False):
+def _find_node(tree, value, parent=None, is_right_child=False):
     """ Returns (node, parent, is_right_child_of_parent) if found (parent is None if root).
     If not found, return (None, None, False). """
 
@@ -56,28 +56,33 @@ def find_node(tree, value, parent=None, is_right_child=False):
     if node_value(tree) == value:
         return (tree, parent, is_right_child)
     elif value < node_value(tree):
-        return find_node(left_child(tree), value, tree, False)
+        return _find_node(left_child(tree), value, tree, False)
     else:  # value > node_value(tree)
-        return find_node(right_child(tree), value, tree, True)
+        return _find_node(right_child(tree), value, tree, True)
 
 
 def contains(tree, value):
     """ Returns true if value in tree; False otherwise. """
 
-    return find_node(tree, value)[0] != None
+    return _find_node(tree, value)[0] != None
 
 
-def find_min_node(tree, parent=None, is_right_child=False):
+def _find_min_node(tree, parent=None, is_right_child=False):
+    """ Finds the minimum node in a tree, and returns (node, parent, is_right_child),
+    where node is the node with the minimum value, parent is the parent of the minimum
+    node, and is_right_child is true if the minimum node is the right-child of its parent
+    (or false if it is the left-child of its parent). """
+
     if left_child(tree) == []:
         return (tree, parent, is_right_child)
     else:
-        return find_min_node(left_child(tree), tree, False)
+        return _find_min_node(left_child(tree), tree, False)
 
 
-def remove_node(node_to_remove, parent, is_right_child_of_parent):
-    # If node not found, return None
+def _remove_node(node_to_remove, parent, is_right_child_of_parent):
+    # If node not found, return
     if not node_to_remove:
-        return None
+        return
 
     def set_parent_reference(new_reference):
         if parent:
@@ -88,12 +93,12 @@ def remove_node(node_to_remove, parent, is_right_child_of_parent):
 
     # If the node to be removed has 2 children; Steps:
     #   * Set the node_to_remove value to the min value in the right subtree
-    #   * call remove_node() on the item which was swapped with
+    #   * call _remove_node() on the item which was swapped with
     if left_child(node_to_remove) != [] and right_child(node_to_remove) != []:
         (right_child_min_node, rchild_min_node_parent, is_min_right_child) = \
-                find_min_node(right_child(node_to_remove), node_to_remove, True)
+                _find_min_node(right_child(node_to_remove), node_to_remove, True)
         node_value(node_to_remove, node_value(right_child_min_node))
-        remove_node(right_child_min_node, rchild_min_node_parent, is_min_right_child)
+        _remove_node(right_child_min_node, rchild_min_node_parent, is_min_right_child)
 
     # If the node to be removed has just 1 child (the left child), set the parent reference
     # to the left child of the node to be removed
@@ -111,8 +116,8 @@ def remove_node(node_to_remove, parent, is_right_child_of_parent):
 
 
 def remove(tree, value):
-    (node_to_remove, parent, is_right_child_of_parent) = find_node(tree, value)
-    return remove_node(node_to_remove, parent, is_right_child_of_parent)
+    (node_to_remove, parent, is_right_child_of_parent) = _find_node(tree, value)
+    _remove_node(node_to_remove, parent, is_right_child_of_parent)
 
 
 def inorder(tree):
@@ -157,6 +162,7 @@ if __name__ == '__main__':
     tree = []
     for i in [5, 3, 8, 5, 2, 10, 20, 15, 30, 0, 7]:
         tree = add(tree, i)
+    print("Tree:")
     print_tree(tree)
     print(tree)
     print("Is 5 in tree?", contains(tree, 5))
@@ -172,5 +178,6 @@ if __name__ == '__main__':
     print()
 
     remove(tree, 8)
+    print("Tree after removing 8:")
     print_tree(tree)
     print("Inorder:", inorder(tree))
